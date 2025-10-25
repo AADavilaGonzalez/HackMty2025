@@ -19,8 +19,8 @@ class Debt:
     payment_frecuency: PaymentFrecuency    
     term_months_original: int
     is_active: bool
-    interest_payment_current: bool
-    capital_payment_current: bool
+    interest_payment_current: float
+    capital_payment_current: float
     days_past_due: int
     interest_rate_default: float
     last_payment_date: datetime
