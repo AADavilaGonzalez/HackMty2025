@@ -1,0 +1,49 @@
+/* Loading screen styles */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f3f4f6;
+    font-family: Arial, sans-serif;
+}
+
+.loading-content {
+    text-align: center;
+}
+
+.loading-emoji {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.loading-title {
+    font-size: 20px;
+    color: #4f46e5;
+    font-weight: bold;
+}
+
+.loading-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 10px;
+}
+
+/* Custom scrollbar for tables */
+.overflow-x-auto::-webkit-scrollbar {
+    height: 8px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
