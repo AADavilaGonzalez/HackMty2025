@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinOpt - Financial Optimizer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="root">
+        <div class="loading-container">
+            <div class="loading-content">
+                <div class="loading-emoji">⏳</div>
+                <div class="loading-title">Loading FinOpt...</div>
+                <div class="loading-subtitle">Please wait while we load the application</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Load React & Babel -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Load application modules with JSX support -->
+    <script type="text/babel" src="components/Icons.jsx"></script>
+    <script type="text/babel" src="components/Header.jsx"></script>
+    <script type="text/babel" src="components/Navigation.jsx"></script>
+    <script type="text/babel" src="components/AccountCard.jsx"></script>
+    <script type="text/babel" src="components/AddAccountModal.jsx"></script>
+    <script type="text/babel" src="components/PaymentSchedule.jsx"></script>
+    <script type="text/babel" src="components/DebtOptimizer.jsx"></script>
+    <script type="text/babel" src="components/CreditPredictor.jsx"></script>
+    <script type="text/babel" src="utils/helpers.js"></script>
+    <script type="text/babel" src="App.jsx"></script>
+</body>
+</html>
