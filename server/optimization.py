@@ -15,7 +15,7 @@ def optimize_debt(data):
 
     debts = []
     for debt in data["debts"]:
-        debt.append(
+        debts.append(
             Debt(
                 debt["balance"],
                 debt["interestRate"],
@@ -25,7 +25,7 @@ def optimize_debt(data):
 
     model = pulp.LpProblem("Debt_Optimization", pulp.LpMinimize)
 
-    B = {}  # balance at start of month t
+    B = {}  # balance at start of month d
     P = {}  # payment in month t
 
     for d, debt in enumerate(debts):
@@ -72,22 +72,35 @@ def optimize_debt(data):
 # ===============================
 
     model.solve(pulp.PULP_CBC_CMD(msg=False))
-    print(f"Status: {pulp.LpStatus[model.status]}")
+
+    results = {
+        "status": model.status,
+        "total_interest_paid": pulp.value(total_interest),
+        "payment_plan": []
+    }
 
 # ===============================
 # Results
 # ===============================
 
     for d, debt in enumerate(debts):
-        print(f"\n{debt['name']}")
-        print("-" * len(debt['name']))
+        debt_plan = {
+            "name": debt.name,
+            "monthly_details": []
+        }
+
         for t in range(MONTHS):
             bal = B[(d, t)].value()
             pay = P[(d, t)].value()
             if bal < 1e-2 and pay < 1e-2:
                 break
-            print(f"Month {t+1:2d}: Pay ${pay:8.2f} | Balance after interest ${B[(d, t+1)].value():,.2f}")
+            month_detail = {
+                "month": t + 1,
+                "payment": round(pay, 2),
+                "remaining_balance": round(B[(d, t + 1)].value(), 2)
+            }
+            debt_plan["monthly_details"].append(month_detail)
 
-    total_interest_value = pulp.value(total_interest)
-    print(f"\nTotal interest paid (optimized): ${total_interest_value:,.2f}")
+        results["payment_plan"].append(debt_plan)
+    return results
 
