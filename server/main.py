@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 
-from .optimization import optimize_debt
+from optimization import optimize_debt
 
 app = Flask("app")
 
