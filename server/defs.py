@@ -7,6 +7,7 @@ class User:
 
 @dataclass
 class Debt:
+    name: str
     balance: float
     interest_rate: float
     minimum_payment: float

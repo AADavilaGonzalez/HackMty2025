@@ -7,16 +7,16 @@ def optimize_debt(data):
 
     MONTHS = 24 #Replace with preditcion
 
-    user = User(
+    user: User = User(
         data["user"]["balance"],
         data["user"]["averageIncome"]
     )
-    monthly_budget = user.avg_income
 
-    debts = []
+    debts: list[Debt] = []
     for debt in data["debts"]:
         debts.append(
             Debt(
+                debt["name"],
                 debt["balance"],
                 debt["interestRate"],
                 debt["minimumPayment"]
@@ -34,15 +34,15 @@ def optimize_debt(data):
         for t in range(MONTHS):
             P[(d, t)] = pulp.LpVariable(f"P_{d}_{t}", lowBound=0)
 
-# ===============================
-# Constraints
-# ===============================
+    # ===============================
+    # Constraints
+    # ===============================
 
     for d, debt in enumerate(debts):
-        i = debt["apr"] / 12.0
+        i = debt.interest_rate / 12.0
 
         # initial balance
-        model += B[(d, 0)] == debt["balance"]
+        model += B[(d, 0)] == debt.balance
 
         # balance transition per month
         for t in range(MONTHS):
@@ -50,43 +50,42 @@ def optimize_debt(data):
 
             # payment bounds
             model += P[(d, t)] <= B[(d, t)] * (1 + i)
-            model += P[(d, t)] >= min(debt["min_payment"], debt["balance"])
+            model += P[(d, t)] >= min(debt.minimum_payment, debt.balance)
 
-# monthly total payment constraint
+    # monthly total payment constraint
     for t in range(MONTHS):
-        model += sum(P[(d, t)] for d in range(len(debts))) <= monthly_budget
+        model += sum(P[(d, t)] for d in range(len(debts))) <= user.balance
 
-# ===============================
-# Objective: minimize total interest
-# ===============================
+    # ===============================
+    # Objective: minimize total interest
+    # ===============================
 
     total_interest = sum(
-        B[(d, t)] * (debts[d]["apr"] / 12.0)
+        B[(d, t)] * (debts[d].interest_rate / 12.0)
         for d in range(len(debts))
         for t in range(MONTHS)
     )
     model += total_interest
 
-# ===============================
-# Solve
-# ===============================
+    # ===============================
+    # Solve
+    # ===============================
 
     model.solve(pulp.PULP_CBC_CMD(msg=False))
 
     results = {
-        "status": model.status,
-        "total_interest_paid": pulp.value(total_interest),
-        "payment_plan": []
+        "totalInterestPaid": pulp.value(total_interest),
+        "paymentPlans": []
     }
 
-# ===============================
-# Results
-# ===============================
+    # ===============================
+    # Results
+    # ===============================
 
     for d, debt in enumerate(debts):
         debt_plan = {
             "name": debt.name,
-            "monthly_details": []
+            "monthlyPayments": []
         }
 
         for t in range(MONTHS):
@@ -95,12 +94,11 @@ def optimize_debt(data):
             if bal < 1e-2 and pay < 1e-2:
                 break
             month_detail = {
-                "month": t + 1,
-                "payment": round(pay, 2),
-                "remaining_balance": round(B[(d, t + 1)].value(), 2)
+                "paymentNumber": t + 1,
+                "paymentAmount": round(pay, 2),
+                "remainingBalance": round(B[(d, t + 1)].value(), 2)
             }
-            debt_plan["monthly_details"].append(month_detail)
+            debt_plan["monthlyPayments"].append(month_detail)
 
-        results["payment_plan"].append(debt_plan)
+        results["paymentPlans"].append(debt_plan)
     return results
-
