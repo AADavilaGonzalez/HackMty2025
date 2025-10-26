@@ -111,7 +111,7 @@ npm run preview
 ## 📂 Final File Structure:
 
 ```
-finopt-app/
+client/
 ├── public/              # Static assets
 ├── src/
 │   ├── components/      # React components
