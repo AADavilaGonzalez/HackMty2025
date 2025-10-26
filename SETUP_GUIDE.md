@@ -38,7 +38,7 @@ A full-stack application that helps optimize debt payment plans using Linear Pro
 
 3. Start the Flask server:
    ```bash
-   python main.py
+   ./start_server.sh
    ```
 
    The backend will run on `http://localhost:5000`
@@ -47,7 +47,7 @@ A full-stack application that helps optimize debt payment plans using Linear Pro
 
 1. Navigate to the client directory:
    ```bash
-   cd client/finopt-app
+   cd client
    ```
 
 2. Install dependencies:
@@ -112,13 +112,12 @@ The PuLP library with CBC solver finds the optimal payment allocation across all
 
 ```
 HackMty2025/
-├── client/
-│   └── finopt-app/          # React frontend
-│       ├── src/
-│       │   ├── components/  # React components
-│       │   ├── utils/       # Helper functions
-│       │   └── main.jsx     # Entry point
-│       └── package.json
+├── client/         # React frontend
+│   ├── src/
+│   │   ├── components/  # React components
+│   │   ├── utils/       # Helper functions
+│   │   └── main.jsx     # Entry point
+│   └── package.json
 └── server/
     ├── main.py              # Flask API
     ├── optimization.py      # LP optimization logic
